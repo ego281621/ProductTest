@@ -1,0 +1,72 @@
+﻿@page "/products"
+
+@inject ProductsApiClient ApiClient
+@using ProductTest.Shared.Models
+
+<h1>Product Data</h1>
+<div class="row">
+    <div class="col-md-6">
+        <a href='/product/add' class="btn btn-primary" role="button">
+            <i class="fas fa-user-plus"></i>
+            Add Product
+        </a>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col">
+        &nbsp;
+    </div>
+</div>
+
+@if (Products == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table table-striped align-middle table-bordered">
+        <thead class="table-success">
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Products)
+            {
+                <tr>
+                    <td>@product.Name</td>
+                    <td>@product.Price</td>
+                    <td>
+                        <a href='/product/edit/@product.Id' class="btn btn-outline-dark" role="button">
+                            Edit
+                        </a>
+                        <a href='/product/delete/@product.Id' class="btn btn-outline-danger" role="button">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}
+
+@code {
+
+    public List<ProductModel> Products { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Products = await ApiClient.GetProductsAsync();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+}

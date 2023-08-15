@@ -1,0 +1,75 @@
+﻿@page "/product/delete/{id:guid}"
+@using ProductTest.Shared.Models
+@inject HttpClient Http
+@inject ProductsApiClient ApiClient
+@inject NavigationManager NavigationManager
+
+<!-- Page Title -->
+<h2>Delete Product</h2>
+<br />
+
+<!-- Product Details -->
+<div class="form-group">
+    <h4>Do you want to delete this Product?</h4>
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>Name</td>
+                <td>@product.Name</td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td>@product.Description</td>
+            </tr>
+            <tr>
+                <td>Price</td>
+                <td>@product.Price</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Delete and Cancel Buttons -->
+<div class="form-group">
+    <!-- Delete button triggers the removal of the product -->
+    <input type="submit" value="Delete" @onclick="(async () => await RemoveProduct(product.Id))" class="btn btn-danger" />
+
+    <!-- Cancel button navigates back to the products page -->
+    <input type="submit" value="Cancel" @onclick="(() => Cancel())" class="btn btn-warning" />
+</div>
+
+@code {
+    [Parameter]
+    public Guid? Id { get; set; }
+
+    ProductModel product = new ProductModel();
+
+    // Initialize component
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            if (Id.HasValue && Id != Guid.Empty)
+            {
+                product = await ApiClient.GetProductAsync(Id.Value.ToString());
+            }
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    // Remove the product
+    protected async Task RemoveProduct(Guid id)
+    {
+        await ApiClient.DeleteProductAsync(Id.Value.ToString());
+        Cancel();
+    }
+
+    // Cancel and navigate back to the products page
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("/products");
+    }
+}
