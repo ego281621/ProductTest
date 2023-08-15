@@ -6,6 +6,9 @@ Welcome to the ProductTest web application! This application allows you to manag
 ## Getting Started - Update Database
 
 ```
+-- Create DATABASE in you're local in SQL Server Management Studio
+ Database Name: ProductsDB
+
 -- Run this script in your local SQL Server Management Studio
 -- Create the "Product" table
 
