@@ -1,24 +1,30 @@
-
 using System.ComponentModel.DataAnnotations;
 using ProductTest.Server.Models;
 using ProductTest.Shared.Models;
 
 namespace ProductTest.Server.Repositories.Product
 {
+    /// <summary>
+    /// Represents a repository class for managing product data.
+    /// </summary>
     public class ProductRepository : IProductRepository
     {
-
         private readonly ProductsDbContext context;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductRepository"/> class.
+        /// </summary>
+        /// <param name="context">The database context for products.</param>
         public ProductRepository(ProductsDbContext context)
         {
             this.context = context;
         }
 
+        /// <inheritdoc/>
         public IEnumerable<ProductModel> GetProducts()
         {
             return context.Products.Select(x => new ProductModel
-            {   
+            {
                 Id = x.Id,
                 Name = x.Name,
                 Description = x.Description,
@@ -26,6 +32,7 @@ namespace ProductTest.Server.Repositories.Product
             }).OrderBy(x => x.Name);
         }
 
+        /// <inheritdoc/>
         public ProductModel GetProduct(string id)
         {
             var result = context.Products.FirstOrDefault(x => x.Id == Guid.Parse(id));
@@ -42,20 +49,23 @@ namespace ProductTest.Server.Repositories.Product
             return new ProductModel();
         }
 
+        /// <inheritdoc/>
         public ProductModel AddProduct(ProductModel product)
         {
-            context.Products.Add(new Models.Product
+            var newProduct = new Models.Product
             {
                 Id = Guid.NewGuid(),
-                Name= product.Name,
-                Description = product.Description, 
+                Name = product.Name,
+                Description = product.Description,
                 Price = product.Price,
-            });
+            };
 
+            context.Products.Add(newProduct);
             context.SaveChanges();
             return product;
         }
 
+        /// <inheritdoc/>
         public ProductModel UpdateProduct(ProductModel product)
         {
             var updateProduct = new Models.Product
@@ -72,13 +82,15 @@ namespace ProductTest.Server.Repositories.Product
             return product;
         }
 
+        /// <inheritdoc/>
         public void DeleteProduct(string id)
         {
             var product = context.Products.FirstOrDefault(x => x.Id == Guid.Parse(id));
-            if(product != null)
+            if (product != null)
+            {
                 context.Products.Remove(product);
                 context.SaveChanges();
+            }
         }
-
     }
 }
