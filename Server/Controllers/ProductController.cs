@@ -10,11 +10,8 @@ namespace ProductTest.Server.Controllers
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
-
         private readonly IProductRepository repository;
         private readonly ILogger<ProductsController> logger;
-        private IProductRepository object1;
-        private ProductsController object2;
 
         public ProductsController(IProductRepository repository, ILogger<ProductsController> logger)
         {
@@ -22,6 +19,7 @@ namespace ProductTest.Server.Controllers
             this.logger = logger;
         }
 
+        // Retrieve all products
         [HttpGet]
         public async Task<IActionResult> GetProducts()
         {
@@ -37,6 +35,7 @@ namespace ProductTest.Server.Controllers
             }
         }
 
+        // Retrieve a specific product by id
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProduct(string id)
         {
@@ -56,6 +55,7 @@ namespace ProductTest.Server.Controllers
             }
         }
 
+        // Create a new product
         [HttpPost]
         public async Task<IActionResult> CreateProduct([FromBody] ProductModel product)
         {
@@ -78,6 +78,7 @@ namespace ProductTest.Server.Controllers
             }
         }
 
+        // Update an existing product
         [HttpPut]
         public async Task<IActionResult> UpdateProduct([FromBody] ProductModel product)
         {
@@ -100,6 +101,7 @@ namespace ProductTest.Server.Controllers
             }
         }
 
+        // Delete a product by id
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(string id)
         {
@@ -119,6 +121,5 @@ namespace ProductTest.Server.Controllers
                 return StatusCode(500, "An error occurred while deleting the product.");
             }
         }
-
     }
 }
