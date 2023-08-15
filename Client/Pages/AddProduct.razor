@@ -1,0 +1,103 @@
+﻿@page "/product/add"
+@page "/product/edit/{id:guid}"
+@inject ProductsApiClient ApiClient
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+@using ProductTest.Shared.Models
+
+<!-- Page Title -->
+<h1>@Title Product</h1>
+<hr />
+
+<!-- Edit Form -->
+<EditForm Model="@product" OnValidSubmit="SaveProduct">
+    <DataAnnotationsValidator />
+
+    <!-- Name Field -->
+    <div class="mb-3">
+        <label for="Name" class="form-label">Name</label>
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="product.Name" />
+        </div>
+        <ValidationMessage For="@(() => product.Name)" />
+    </div>
+
+    <!-- Description Field -->
+    <div class="mb-3">
+        <label for="Description" class="form-label">Description</label>
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="product.Description" />
+        </div>
+    </div>
+
+    <!-- Price Field -->
+    <div class="mb-3">
+        <label for="Price" class="form-label">Price</label>
+        <div class="col-md-4">
+            <InputNumber class="form-control" @bind-Value="product.Price" />
+        </div>
+        <ValidationMessage For="@(() => product.Price)" />
+    </div>
+
+    <!-- Form Buttons -->
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button class="btn btn-light" @onclick="Cancel">Cancel</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public Guid? Id { get; set; }
+
+    // Page title, initially "Add"
+    protected string Title = "Add";
+
+    // Model to hold product data
+    protected ProductModel product = new();
+
+    // Fetch product data when component parameters are set
+    protected override async Task OnParametersSetAsync()
+    {
+        try
+        {
+            if (Id.HasValue && Id != Guid.Empty)
+            {
+                Title = "Edit";
+                product = await ApiClient.GetProductAsync(Id.Value.ToString());
+            }
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    // Save product data
+    protected async Task SaveProduct()
+    {
+        try
+        {
+            if (Id.HasValue && Id != Guid.Empty)
+            {
+                await ApiClient.UpdateProductAsync(product);
+            }
+            else
+            {
+                await ApiClient.AddProductAsync(product);
+            }
+            Cancel();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    // Cancel and navigate back to the products page
+    public void Cancel()
+    {
+        NavigationManager.NavigateTo("/products");
+    }
+}
