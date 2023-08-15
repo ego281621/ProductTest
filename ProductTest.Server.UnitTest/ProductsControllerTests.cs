@@ -10,7 +10,6 @@ namespace ProductTest.Server.UnitTest
 {
     public class ProductsControllerTests
     {
-
         private readonly Mock<IProductRepository> mockRepo;
         private readonly ProductsController controller;
         private Mock<ILogger<ProductsController>> logger;
@@ -99,6 +98,5 @@ namespace ProductTest.Server.UnitTest
                   new ProductModel(){ Id = Guid.Parse("AAD32900-5EFC-4109-B7A8-CFADAF534679"), Name = "Product 3" },
                 };
         }
-
     }
 }
