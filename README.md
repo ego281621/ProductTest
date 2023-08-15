@@ -15,18 +15,18 @@ Welcome to the ProductTest web application! This application allows you to manag
    
 Open your browser and navigate to https://localhost:5001 or https://localhost:7052/ to access the application.
 
-Features
+### Features
 Add new products with their details such as name, description, and price.
 Edit existing products' information.
 Delete products from the database.
 Seamless user interface with Blazor WebAssembly.
 
-Project Structure
+#### Project Structure
 Pages: Contains the Blazor components that represent the different pages of the application.
 Shared: Contains shared models, components, and utilities used across the application.
 Client: Contains the API client for communication with the backend.
-Dependencies
 
+#### Dependencies
 Blazor WebAssembly
 HttpClient for API communication
 Bootstrap for styling
